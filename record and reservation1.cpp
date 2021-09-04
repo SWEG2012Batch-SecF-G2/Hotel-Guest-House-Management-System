@@ -71,10 +71,9 @@ void displayHomepage (int HOMEPAGE)
 		cin >> ID;
 		cout << "Please enter your password:  ";
 		cin >> password;
-
-		if(employees[--ID].employeePassword == password);
-			//EmployeeNextPage(ID);
-		else
+		
+			
+		while(employees[--ID].employeePassword != password)
 		{
 			cout << "Incorrect ID or password please try again!\n";
 			cout << "Please enter your employee ID:  ";
@@ -82,6 +81,8 @@ void displayHomepage (int HOMEPAGE)
 			cout << "Please enter your password:  ";
 			cin >> password;
 		}
+
+		EmployeeNextPage(ID);
 
 	}
 
