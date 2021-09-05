@@ -1,0 +1,366 @@
+#include <iostream>
+#include<iomanip>
+#include<string.h>
+#include<cstring>
+
+using namespace std;
+
+const int numEmp = 20, numRooms = 80; //total number of employees in the hotel
+int numMembers = 0, numComments = 0, customersInHotel = 0;
+int numAvail = 0, numUnavail = 0;// number of available and unavailable rooms
+
+
+struct date
+{
+	int dd, mm, yy;
+};
+
+struct rooms //room attributes
+{
+	char type[25];
+	char describe[60];
+	unsigned int roomNo, beds;
+	bool AC, InRoomSafe, avail;
+	float price;
+}room[80];
+
+struct customerReservationInfo
+{
+	string customerName;
+	string customerID;
+	string reservationEmail;
+	unsigned int age;
+	date reservationDate, checkInDate, checkOutDate;
+	date duration;
+
+}customers[80];
+
+void roomReservation(int roomNum);
+
+void roomDescription(rooms r[])
+{
+	for(int i=0;i<80;i++)
+	{
+		if(i>=0 && i<10)
+		{
+			strcpy(room[i].type,"Single Room");//naming a specific range of rooms
+		strcpy(room[i].describe,"single bed for single occupancy");//describing the room type
+			room[i].roomNo=i+1;
+			room[i].beds=1;
+			room[i].price=500.00;
+			if(i>=0 &&i<5)
+				{room[i].AC=true; room[i].price+=30;}//providing Ac for half the rooms
+			else 
+				{room[i].AC=false;}
+			if(i>=3 && i<8)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}//providing  inroom safe for 5 rooms, some have AC and some don't
+			else 
+				{room[i].InRoomSafe=false;}
+			room[i].avail=true;
+		}
+		
+	else if(i>=10 && i<20)
+		{
+				strcpy(room[i].type,"Twin room");
+			strcpy(room[i].describe,"single beds for double occupancy");
+			room[i].roomNo=i+1;
+			room[i].beds=2;
+			room[i].price=700.00;
+			
+			if(i>=10 &&i<15)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=13 && i<18)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+			
+			room[i].avail=true;
+		}
+		else if(i>=20 && i<30)
+		{
+				strcpy(room[i].type,"Double Room");
+			strcpy(room[i].describe,"single bed for double occupancy");
+			room[i].roomNo=i+1;
+			room[i].beds=1;
+			room[i].price=750.00;
+			
+			if(i>=20 &&i<25)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=23 && i<28)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+		else if(i>=30 && i<40)
+		{
+				strcpy(room[i].type,"Double & Double Room");
+			strcpy(room[i].describe,"double beds for 4 people");
+			room[i].roomNo=i+1;
+			room[i].beds=2;
+			room[i].price=800.00;
+			
+			if(i>=30 &&i<35)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=33 && i<38)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+		else if(i>=40 && i<50)
+		{
+				strcpy(room[i].type,"Triple Room");
+			strcpy(room[i].describe,"single beds for 3 people");
+			room[i].roomNo=i+1;
+			room[i].beds=3;
+			room[i].price=850.00;
+			
+			if(i>=40 &&i<45)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=43 && i<48)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+		else if(i>=50 && i<60)
+		{
+				strcpy(room[i].type,"King Room");
+			strcpy(room[i].describe,"6ftX6ft king sized bed");
+			room[i].roomNo=i+1;
+			room[i].beds=1;
+			room[i].price=900.00;
+			
+				if(i>=50 &&i<55)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=53 && i<58)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+		else if(i>=60 && i<70)
+		{
+				strcpy(room[i].type,"Queen Room");
+			strcpy(room[i].describe,"5ftX6ft queen sized bed");
+			room[i].roomNo=i+1;
+			room[i].beds=1;
+			room[i].price=870.00;
+				
+			if(i>=60 &&i<65)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=63 && i<68)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+		else if(i>=70 && i<80)
+		{
+				strcpy(room[i].type,"Interconnecting Room");
+			strcpy(room[i].describe,"2 rooms with a common wall and door");
+			room[i].roomNo=i+1;
+			room[i].beds=2;
+			room[i].price=950.00;
+				
+			if(i>=70 &&i<75)
+				{room[i].AC=true; room[i].price+=30;}
+			else 
+				{room[i].AC=false;}
+			if(i>=73 && i<78)
+			 {room[i].InRoomSafe=true;room[i].price+=40;}
+			else 
+				{room[i].InRoomSafe=false;}
+		
+			room[i].avail=true;
+		}
+	}
+}
+
+
+void roomStat(rooms r[])
+{
+	int roomChoice;
+	
+	cout<<" "<<setfill('_')<<setw(132)<<"_"<<setfill(' ')<<endl;
+	cout<<setw(7)<<"|Room NO|"<<setw(25)<<"Room Type|"<<setw(38)<<"   Description  |"<<setw(11)<<"price(ETB)|"<<setw(12)<<"NO of beds|"<<setw(8)<<"AC|"<<setw(16)<<"In room safe|"<<setw(15)<<"availability|"<<endl;
+	cout<<"|"<<setfill('=')<<setw(8)<<"|"<<setw(25)<<"|"<<setw(38)<<"|"<<setw(11)<<"|"<<setw(12)<<"|"<<setw(8)<<"|"<<setw(16)<<"|"<<setw(15)<<"|"<<setfill(' ')<<endl;
+	for(int i=0;i<80;i++)
+	{
+		cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
+		if(room[i].AC==true)
+			{cout<<setw(8)<<"AC|";}
+		else 
+			{cout<<setw(8)<<"no AC|";}
+		if(room[i].InRoomSafe==true) 
+			{cout<<setw(16)<<"available|";}
+		else
+			{cout<<setw(16)<<"not available|";}
+			
+		if(room[i].avail=true)
+			{cout<<setw(15)<<"vacant|"<<endl;}
+		else
+			{cout<<setw(15)<<"reserved|"<<endl;}
+	}
+		cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;
+}
+
+
+int main() 
+{
+		roomDescription(room);
+		
+	int option;
+	cout << "press 0 to view all room types \n";
+	cout << "press 1 to display room with your budget range: ";
+	cin >> option;
+	
+	if(option == 0)
+		roomStat (room);
+	else if(option == 1)
+	{
+		int budget, roomChoice;
+		cout << "Enter 1 for budget range 500 - 700\n";
+		cout << "Enter 2 for budget range 701 - 900\n";
+		cout << "Enter 3 for budget range 901 - 1100\n";
+		cin >> budget;
+		
+		cout<<" "<<setfill('_')<<setw(132)<<"_"<<setfill(' ')<<endl;
+		cout<<setw(7)<<"|Room NO|"<<setw(25)<<"Room Type|"<<setw(38)<<"   Description  |"<<setw(11)<<"price(ETB)|"<<setw(12)<<"NO of beds|"<<setw(8)<<"AC|"<<setw(16)<<"In room safe|"<<setw(15)<<"availability|"<<endl;
+		cout<<"|"<<setfill('=')<<setw(8)<<"|"<<setw(25)<<"|"<<setw(38)<<"|"<<setw(11)<<"|"<<setw(12)<<"|"<<setw(8)<<"|"<<setw(16)<<"|"<<setw(15)<<"|"<<setfill(' ')<<endl;
+
+		
+		switch(budget)
+		{	
+			case 1:
+				for(int i = 0; i < numRooms; i++)
+				{
+					if(room[i].price >= 500 && room[i].price <= 700)
+					{
+						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
+						
+						if(room[i].AC==true)
+							{cout<<setw(8)<<"AC|";}
+			   		   	else 
+							{cout<<setw(8)<<"no AC|";}
+								
+						if(room[i].InRoomSafe==true) 
+				   		   	{cout<<setw(16)<<"available|";}
+				   		else
+				   		   	{cout<<setw(16)<<"not available|";}
+			
+			   		   	if(room[i].avail=true)
+				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
+						else
+							{cout<<setw(15)<<"reserved|"<<endl;}
+					}
+				}
+				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
+				cout << "Enter room number for reservation: ";
+				cin >> roomChoice;
+				roomReservation(roomChoice);
+				break;
+			case 2:
+				for(int i = 0; i < numRooms; i++)
+				{
+					if(room[i].price >= 701 && room[i].price <= 900)
+					{
+						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
+						
+						if(room[i].AC==true)
+							{cout<<setw(8)<<"AC|";}
+			   		   	else 
+							{cout<<setw(8)<<"no AC|";}
+								
+						if(room[i].InRoomSafe==true) 
+				   		   	{cout<<setw(16)<<"available|";}
+				   		else
+				   		   	{cout<<setw(16)<<"not available|";}
+			
+			   		   	if(room[i].avail=true)
+				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
+						else
+							{cout<<setw(15)<<"reserved|"<<endl;}
+					}
+				}
+				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
+				cout << "Enter room number for reservation: ";
+				cin >> roomChoice;
+				roomReservation(roomChoice);
+				break;
+			case 3:
+				for(int i = 0; i < numRooms; i++)
+				{
+					if(room[i].price >= 901 && room[i].price <= 1050)
+					{
+						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
+						
+						if(room[i].AC==true)
+							{cout<<setw(8)<<"AC|";}
+			   		   	else 
+							{cout<<setw(8)<<"no AC|";}
+								
+						if(room[i].InRoomSafe==true) 
+				   		   	{cout<<setw(16)<<"available|";}
+				   		else
+				   		   	{cout<<setw(16)<<"not available|";}
+			
+			   		   	if(room[i].avail=true)
+				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
+						else
+							{cout<<setw(15)<<"reserved|"<<endl;}
+					}
+				}
+				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
+				cout << "Enter room number for reservation: ";
+				cin >> roomChoice;
+				roomReservation(roomChoice);
+				break;
+		}
+	};
+		
+}
+
+void roomReservation(int roomNum)
+{
+	if(room[--roomNum].avail == 1)
+	{
+		cout << "Enter your name: ";
+		getline(cin, customers[customersInHotel].customerName);
+		cin.ignore();
+		cout << "Enter your email: ";
+		cin >> customers[customersInHotel].reservationEmail;
+		cout << "Enter your kebele ID number: ";
+		cin >> customers[customersInHotel].customerID;
+		cout << "Enter your age: ";
+		cin >> customers[customersInHotel].age;
+		cout << "Enter reservation date(day-month-year format): ";
+		cin >> customers[customersInHotel].reservationDate.dd >> customers[customersInHotel].reservationDate.mm >> customers[customersInHotel].reservationDate.yy;
+		cout << "Enter check in date(day-month-year format): ";
+		cin >> customers[customersInHotel].checkInDate.dd >> customers[customersInHotel].checkInDate.mm >> customers[customersInHotel].checkInDate.yy;
+		cout << "Enter check out date(day-month-year format): ";
+		cin >> customers[customersInHotel].checkOutDate.dd >> customers[customersInHotel].checkOutDate.mm >> customers[customersInHotel].checkOutDate.yy;
+	}
+	else
+	{
+		cout << "Sorry! The room you chose is unavailable. Please choose a different room.";
+	}
+}
