@@ -93,7 +93,7 @@ int packagePayment(packageInfo packages[3], int chosenPackage)
 	cout << "Enter name: ";
 	cin.ignore();
 	getline(cin, packageBuyer[numPackagePurchaser].purchaserName);
-	cout << "Enter credit card number without spaces(a credit card number is required to guarantee your package booking. \nThe credit card provided will be charged by the hotel up on arrival.)";
+	cout << "Enter the 16 digits credit card number without spaces(a credit card number is required to guarantee your package booking. \nThe credit card provided will be charged by the hotel up on arrival.)";
 	cin >> packageBuyer[numPackagePurchaser].creditCardNum;
 	
 	if(strlen(packageBuyer[numPackagePurchaser].creditCardNum) == 16)
