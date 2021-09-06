@@ -2,6 +2,7 @@
 #include<iomanip>
 #include<string.h>
 #include<cstring>
+#include<stdio.h>
 
 using namespace std;
 
@@ -9,10 +10,21 @@ const int numEmp = 20, numRooms = 80; //total number of employees in the hotel
 int numMembers = 0, numComments = 0, customersInHotel = 0;
 int numAvail = 0, numUnavail = 0;// number of available and unavailable rooms
 
+void DisplayCustomerMenu(int option)
+{
+	int nextPage;
+			cout << "\n\nEnter 1 for Bar and restaurant \n2 for Fitness and Gym \n3 for Rooms and Accommodation \n4 for Services";
+			cout << "\n5 for Special Offers \n6 for Meeting and Events \n7 for Review and Rating \n8 for Member Registration\n  ";
+			//cin >> nextPage;
+			//CustomerNextPage(nextPage);
+
+}
+void roomReservation(int);
+void RoomChoice();
 
 struct date
 {
-	int dd, mm, yy;
+	unsigned int dd, mm, yy;
 };
 
 struct rooms //room attributes
@@ -215,7 +227,7 @@ void roomStat(rooms r[])
 		else
 			{cout<<setw(16)<<"not available|";}
 			
-		if(room[i].avail=true)
+		if(room[i].avail==true)
 			{cout<<setw(15)<<"vacant|"<<endl;}
 		else
 			{cout<<setw(15)<<"reserved|"<<endl;}
@@ -227,20 +239,28 @@ void roomStat(rooms r[])
 int main() 
 {
 		roomDescription(room);
+		RoomChoice();
 		
-	int option;
-	cout << "press 0 to view all room types \n";
-	cout << "press 1 to display room with your budget range: ";
+}
+
+void RoomChoice()
+{
+	
+	
+int option;
+	cout << "\n\t\tpress 0 to view all room types \n";
+	cout << "\t\tpress 1 to display room with your budget range: ";
 	cin >> option;
 	
 	if(option == 0)
 		roomStat (room);
 	else if(option == 1)
 	{
-		int budget, roomChoice;
-		cout << "Enter 1 for budget range 500 - 700\n";
-		cout << "Enter 2 for budget range 701 - 900\n";
-		cout << "Enter 3 for budget range 901 - 1100\n";
+		int changer,budget, roomChoice,count=0;
+		int checkChoice[numRooms];
+	change:	cout << "\t\t\tEnter 1 for budget range 500 - 700\n";
+		cout << "\t\t\tEnter 2 for budget range 701 - 900\n";
+		cout << "\t\t\tEnter 3 for budget range 901 - 1100\n";
 		cin >> budget;
 		
 		cout<<" "<<setfill('_')<<setw(132)<<"_"<<setfill(' ')<<endl;
@@ -249,12 +269,13 @@ int main()
 
 		
 		switch(budget)
-		{	
+		{
 			case 1:
 				for(int i = 0; i < numRooms; i++)
 				{
 					if(room[i].price >= 500 && room[i].price <= 700)
 					{
+						checkChoice[i]=room[i].roomNo;
 						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
 						
 						if(room[i].AC==true)
@@ -267,22 +288,50 @@ int main()
 				   		else
 				   		   	{cout<<setw(16)<<"not available|";}
 			
-			   		   	if(room[i].avail=true)
+			   		   	if(room[i].avail==true)
 				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
 						else
-							{cout<<setw(15)<<"reserved|"<<endl;}
+							{cout<<setw(15)<<"reserved|"<<endl;}	
+					}
+					else
+					{
+						checkChoice[i]=0;
 					}
 				}
+				
 				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
-				cout << "Enter room number for reservation: ";
-				cin >> roomChoice;
-				roomReservation(roomChoice);
+				cout<<"\tWould you like to see another budget range?\n\t press 1 for yes or press 2 to continue with the current range ";
+				cin>>changer;
+				if(changer==1){goto change;	}
+				else if(changer==2)
+				{
+					enter1: cout << "Enter room number for reservation: ";
+					cin >> roomChoice;
+					
+					for(int i=0;i<numRooms;i++)
+					{
+						if(roomChoice==checkChoice[i] && roomChoice!=0)
+						{
+							roomReservation(roomChoice);
+							
+						}
+						else count++;
+					}
+						if(count!=0)
+						{
+							cout<<"wrong choice! please try again "<<endl;
+							goto enter1;
+						}
+				}
 				break;
+			
 			case 2:
+				count=0;
 				for(int i = 0; i < numRooms; i++)
 				{
 					if(room[i].price >= 701 && room[i].price <= 900)
 					{
+						checkChoice[i]=room[i].roomNo;
 						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
 						
 						if(room[i].AC==true)
@@ -295,22 +344,50 @@ int main()
 				   		else
 				   		   	{cout<<setw(16)<<"not available|";}
 			
-			   		   	if(room[i].avail=true)
+			   		   	if(room[i].avail==true)
 				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
 						else
-							{cout<<setw(15)<<"reserved|"<<endl;}
+							{cout<<setw(15)<<"reserved|"<<endl;}	
+					}
+					else
+					{
+						checkChoice[i]=0;
 					}
 				}
+				
 				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
-				cout << "Enter room number for reservation: ";
-				cin >> roomChoice;
-				roomReservation(roomChoice);
+				cout<<"\tWould you like to see another budget range?\n\t press 1 for yes or press 2 to continue with the current range ";
+				cin>>changer;
+				if(changer==1){goto change;	}
+				else if(changer==2)
+				{
+					enter2: cout << "Enter room number for reservation: ";
+					cin >> roomChoice;
+					
+					for(int i=0;i<numRooms;i++)
+					{
+						if(roomChoice==checkChoice[i] && roomChoice!=0)
+						{
+							roomReservation(roomChoice);
+							break;
+						}
+						else count++;
+					}
+						if(count!=0)
+						{
+							cout<<"wrong choice! please try again "<<endl;
+							goto enter2;
+						}
+				}
 				break;
+				
 			case 3:
+				count=0;
 				for(int i = 0; i < numRooms; i++)
 				{
 					if(room[i].price >= 901 && room[i].price <= 1050)
 					{
+						checkChoice[i]=room[i].roomNo;
 						cout<<"| "<<left<<setw(5)<<room[i].roomNo<<right<<" |"<<setw(24)<<room[i].type<<"|"<<right<<setw(37)<<room[i].describe<<"|"<<setw(10)<<room[i].price<<"|"<<setw(11)<<room[i].beds<<"|";
 						
 						if(room[i].AC==true)
@@ -323,16 +400,41 @@ int main()
 				   		else
 				   		   	{cout<<setw(16)<<"not available|";}
 			
-			   		   	if(room[i].avail=true)
+			   		   	if(room[i].avail==true)
 				   		   	{cout<<setw(15)<<"vacant|"<<endl;}
 						else
-							{cout<<setw(15)<<"reserved|"<<endl;}
+							{cout<<setw(15)<<"reserved|"<<endl;}	
+					}
+					else
+					{
+						checkChoice[i]=0;
 					}
 				}
+				
 				cout<<"'"<<setfill('-')<<setw(8)<<"'"<<setw(25)<<"'"<<setw(38)<<"'"<<setw(11)<<"'"<<setw(12)<<"'"<<setw(8)<<"'"<<setw(16)<<"'"<<setw(15)<<"'"<<setfill(' ')<<endl;				
-				cout << "Enter room number for reservation: ";
-				cin >> roomChoice;
-				roomReservation(roomChoice);
+					cout<<"\tWould you like to see another budget range?\n\t press 1 for yes or press 2 to continue with the current range ";
+				cin>>changer;
+				if(changer==1){goto change;	}
+				else if(changer==2)
+				{
+					enter: cout << "Enter room number for reservation: ";
+					cin >> roomChoice;
+					
+					for(int i=0;i<numRooms;i++)
+					{
+						if(roomChoice==checkChoice[i] && roomChoice!=0)
+						{
+							roomReservation(roomChoice);
+							break;
+						}
+						else count++;
+					}
+						if(count!=0)
+						{
+							cout<<"wrong choice! please try again "<<endl;
+							goto enter;
+						}
+				}
 				break;
 		}
 	};
@@ -343,24 +445,59 @@ void roomReservation(int roomNum)
 {
 	if(room[--roomNum].avail == 1)
 	{
-		cout << "Enter your name: ";
-		getline(cin, customers[customersInHotel].customerName);
-		cin.ignore();
-		cout << "Enter your email: ";
-		cin >> customers[customersInHotel].reservationEmail;
-		cout << "Enter your kebele ID number: ";
-		cin >> customers[customersInHotel].customerID;
-		cout << "Enter your age: ";
-		cin >> customers[customersInHotel].age;
-		cout << "Enter reservation date(day-month-year format): ";
-		cin >> customers[customersInHotel].reservationDate.dd >> customers[customersInHotel].reservationDate.mm >> customers[customersInHotel].reservationDate.yy;
-		cout << "Enter check in date(day-month-year format): ";
-		cin >> customers[customersInHotel].checkInDate.dd >> customers[customersInHotel].checkInDate.mm >> customers[customersInHotel].checkInDate.yy;
-		cout << "Enter check out date(day-month-year format): ";
-		cin >> customers[customersInHotel].checkOutDate.dd >> customers[customersInHotel].checkOutDate.mm >> customers[customersInHotel].checkOutDate.yy;
+			//cout << "Enter your email: ";
+			//cin >> customers[customersInHotel].reservationEmail;
+			cout << "\n\nEnter your kebele ID number: ";
+			cin >> customers[customersInHotel].customerID;
+			cin.ignore(35,'\n');
+			cout << "\nEnter your name: ";
+			getline(cin, customers[customersInHotel].customerName);
+			cout << "\nEnter your age: ";
+			cin >> customers[customersInHotel].age;	
+			if(customers[customersInHotel].age < 18)
+			{
+				cout << "Reservation failed! Below the allowed age limit. Taking you to the home page."; 
+				DisplayCustomerMenu(1);
+				
+			}
+			cout << "\nEnter reservation date(dd-mm-yyyy): ";
+			cin >> customers[customersInHotel].reservationDate.dd >> customers[customersInHotel].reservationDate.mm >> customers[customersInHotel].reservationDate.yy;
+			reCheck: if (customers[customersInHotel].reservationDate.dd==0 || customers[customersInHotel].reservationDate.dd > 30 ||customers[customersInHotel].reservationDate.mm==0 || customers[customersInHotel].reservationDate.mm> 12  || customers[customersInHotel].reservationDate.yy != 2021)
+			{
+				cout << "\nInvalid Reservation Date! Please try again.\n";
+				cout << "Re-enter reservation date(dd-mm-yyyy): ";
+			    cin >> customers[customersInHotel].reservationDate.dd >> customers[customersInHotel].reservationDate.mm >> customers[customersInHotel].reservationDate.yy;	
+					goto reCheck;		
+			}
+			cout << "\nEnter check in date(dd-mm-yyyy): ";
+			cin >> customers[customersInHotel].checkInDate.dd >> customers[customersInHotel].checkInDate.mm >> customers[customersInHotel].checkInDate.yy;
+				reCheck1:if (customers[customersInHotel].checkInDate.dd==0 || customers[customersInHotel].checkInDate.dd > 30 ||customers[customersInHotel].checkInDate.mm==0 || customers[customersInHotel].checkInDate.mm> 12  || customers[customersInHotel].checkInDate.yy != 2021)
+			{
+				cout << "\nInvalid Check in Date! Please try again.\n";
+				cout << "Re-enter check in date(dd-mm-yyyy): ";
+			    cin >> customers[customersInHotel].checkInDate.dd >> customers[customersInHotel].checkInDate.mm >> customers[customersInHotel].checkInDate.yy;		
+				goto reCheck1;	
+			}
+	    
+			cout << "\nEnter check out date(dd-mm-yyyy): ";
+			cin >> customers[customersInHotel].checkOutDate.dd >> customers[customersInHotel].checkOutDate.mm >> customers[customersInHotel].checkOutDate.yy;
+				reCheck2:if(customers[customersInHotel].checkOutDate.dd==0 || customers[customersInHotel].checkOutDate.dd > 30 ||customers[customersInHotel].checkOutDate.mm==0 || customers[customersInHotel].checkOutDate.mm> 12  || customers[customersInHotel].checkOutDate.yy != 2021)
+			{
+				cout << "\nInvalid Check out Date! Please try again.\n";
+				cout << "Re-enter check out date(dd-mm-yyyy): ";
+			    cin >> customers[customersInHotel].checkOutDate.dd >> customers[customersInHotel].checkOutDate.mm >> customers[customersInHotel].checkOutDate.yy;	
+				goto reCheck2;			
+			}	
+	
+		cout << "\n\n\nReserved Successfully! Thank You for choosing us! Taking you to the home page.";
+		room[--roomNum].avail == 0;
+		customersInHotel++;
+		DisplayCustomerMenu(1);
+		
 	}
 	else
 	{
 		cout << "Sorry! The room you chose is unavailable. Please choose a different room.";
+		RoomChoice();
 	}
 }
